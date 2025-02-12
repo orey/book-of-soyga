@@ -6,12 +6,42 @@
 # Based on the paper from Jim Reeds (1998)
 # John Dee and the Magic tables in the Book of Soyga
 #----------------------------------------------------
+import math
+from PIL import Image, ImageDraw
+
 
 #=============================================================Constants
 
 # The standard alphabet at the time of John Dee
 #         1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  21  22  23
 CHARS = ['a','b','c','d','e','f','g','h','i','k','l','m','n','o','p','q','r','s','t','u','x','y','z']
+
+COLORS = [
+    (255, 0, 0),
+    (255, 67, 0),
+    (255, 133, 0),
+    (255, 200, 0),
+    (244, 255, 0),
+    (177, 255, 0),
+    (111, 255, 0),
+    (44, 255, 0),
+    (0, 255, 22),
+    (0, 255, 89),
+    (0, 255, 155),
+    (0, 255, 222),
+    (0, 222, 255),
+    (0, 155, 255),
+    (0, 89, 255),
+    (0, 22, 255),
+    (44, 0, 255),
+    (111, 0, 255),
+    (177, 0, 255),
+    (244, 0, 255),
+    (255, 0, 200),
+    (255, 0, 133),
+    (255, 0, 67)
+]
+
 
 # The decrypting offset found by Jim Reeds (!)
 OFFSET = {
@@ -105,6 +135,11 @@ def getValue(letter):
     return CHARS.index(theletter) + 1
 
 
+def getColor(letter):
+    theletter = letter.lower()
+    return COLORS[CHARS.index(theletter)]
+
+    
 def calculateValue(text):
     value = 0
     for letter in text:
@@ -167,6 +202,36 @@ def printGrid(grid, name="", f=None):
         myprint('','\n',f)
         index += 1
 
+
+def displayColoredGrid(grid, name):
+    size = len(grid)
+    # size of cell
+    w, h = 20,20
+    # black offset around the cells 2x20
+    gridw, gridh = (w * size) + 40, (h * size) +40
+    img = Image.new("RGB",(gridw,gridh))
+    # create rectangle image 
+    img1 = ImageDraw.Draw(img)
+    # x => within line so j, y => line so i
+    #origin is at the bottom
+    originx, originy = 20, 20
+    x, y = 0, 0
+    for i in range(size):
+        for j in range(size):
+            # calculate the position of the cell in i-th line and j-th column
+            x = originx + (j * 20)
+            y = originy + (i * 20)
+            shape = [(x, y), (x+20, y+20)]
+            color = None
+            if grid[i][j] == 0:
+                color = (0,0,0)
+            else:
+                color = getColor(grid[i][j])
+            img1.rectangle(shape, fill =color, outline ="black") 
+    #img.show()
+    img.save(name)
+    
+    
         
 def firstLineNextChar(west):
      next = (getValue(west) + f(west)) % 23
@@ -228,15 +293,18 @@ def compareGrids(g1, g2):
         return False
     #else:
         #print("Grids have " + str(nbcols) + " columns")
+    newgrid = createGrid(nblines)
     line = ""
     for i in range(nblines):
         for j in range(nbcols):
             if g1[i][j] == g2[i][j]:
                 line += g1[i][j] + " "
+                newgrid[i][j] = g1[i][j]
             else:
                 line += "- "
         print(line)
         line=""
+    return newgrid
 
 
 def compareByNumbers(tables, nb1, nb2):
@@ -246,7 +314,7 @@ def compareByNumbers(tables, nb1, nb2):
           + " and table "
           + str(KEYWORDS[nb2-1][0]) + ", " + KEYWORDS[nb2-1][1]
           + ":")
-    compareGrids(tables[nb1-1], tables[nb2-1])   
+    return compareGrids(tables[nb1-1], tables[nb2-1])   
     
         
 def main():
@@ -255,12 +323,16 @@ def main():
     for elem in KEYWORDS:
         g = createCompleteGrid(elem[2])
         printGrid(g,"Grid number " + str(elem[0]) + ": " + elem[1],f)
+        displayColoredGrid(g, "%02d - " % (elem[0],) + elem[1] + ".png")
         tables.append(g)
     f.close()
-    compareByNumbers(tables,1,13)
-    compareByNumbers(tables,2,14)
+    comp1 = compareByNumbers(tables,1,13)
+    displayColoredGrid(comp1, "Comparison Aries 1 Aries 13.png")
+    comp2 = compareByNumbers(tables,2,14)
+    displayColoredGrid(comp2, "Comparison Taurus 2 Taurus 14.png")
     calculateValue("Pater Creator")
     calculateValue("Aries")
+
 
     
 #======================================== MAIN
