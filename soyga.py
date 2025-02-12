@@ -105,6 +105,18 @@ def getValue(letter):
     return CHARS.index(theletter) + 1
 
 
+def calculateValue(text):
+    value = 0
+    for letter in text:
+        if letter.lower() in CHARS:
+            print(letter, end=": ")
+            val = getValue(letter.lower())
+            print(val)
+            value += val
+    print("Value for '" + text + "': " + str(value))
+    return value
+
+
 def test_getValue():
     print('Index of a: ' + str(getValue('a')))
     print('Index of J: ' + str(getValue('U')))
@@ -203,17 +215,57 @@ def createCompleteGrid(keyword):
     return grid
 
 
+def compareGrids(g1, g2):
+    nblines = len(g1)
+    if len(g2) != nblines:
+        print("Grids do not have the same number of lines")
+        return False
+    #else:
+        #print("Grids have " + str(nblines) + " lines")
+    nbcols = len(g1[0])
+    if len(g2[0]) != nbcols:
+        print("Grids do not have the same number of columns")
+        return False
+    #else:
+        #print("Grids have " + str(nbcols) + " columns")
+    line = ""
+    for i in range(nblines):
+        for j in range(nbcols):
+            if g1[i][j] == g2[i][j]:
+                line += g1[i][j] + " "
+            else:
+                line += "- "
+        print(line)
+        line=""
+
+
+def compareByNumbers(tables, nb1, nb2):
+    print("++++++++++++++++++++++++++++++++++++++")
+    print("Comparison between table "
+          + str(KEYWORDS[nb1-1][0]) + ", " + KEYWORDS[nb1-1][1]
+          + " and table "
+          + str(KEYWORDS[nb2-1][0]) + ", " + KEYWORDS[nb2-1][1]
+          + ":")
+    compareGrids(tables[nb1-1], tables[nb2-1])   
     
         
 def main():
     f = open(OUTPUTFILE, "w")
+    tables = []
     for elem in KEYWORDS:
         g = createCompleteGrid(elem[2])
         printGrid(g,"Grid number " + str(elem[0]) + ": " + elem[1],f)
+        tables.append(g)
+    f.close()
+    compareByNumbers(tables,1,13)
+    compareByNumbers(tables,2,14)
+    calculateValue("Pater Creator")
+    calculateValue("Aries")
+
     
-
-
-main()
+#======================================== MAIN
+if __name__ == "__main__":
+    main()
 
     
     
