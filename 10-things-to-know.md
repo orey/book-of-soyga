@@ -4,7 +4,7 @@
 
 - The Book of Soyga is a mysterious 16th-century manuscript that has been the subject of much speculation and study over the years.
 - The book is named after its original owner, the Elizabethan scholar John Dee, who acquired it in the 16th century. The title “Soyga” is derived from the name of the book’s mysterious author, who is only referred to as “A.B.”
-The book is written in a combination of Latin, Old English, and a mysterious cipher that has yet to be fully deciphered. Some have suggested that the cipher may contain hidden messages or codes.
+- The book is written in a combination of Latin, Old English, and a mysterious cipher that has yet to be fully deciphered. Some have suggested that the cipher may contain hidden messages or codes.
 - The Book of Soyga contains a variety of topics, including angelic communication, herbalism, and divination. It also includes a series of tables and diagrams that are believed to represent complex astrological calculations.
 - One of the most intriguing aspects of the book is a section called “The Forty Eight Calls or Keys,” which is a series of invocations designed to summon the angels and spirits of the Earth and the cosmos.
 - The Book of Soyga has been linked to the Voynich Manuscript, another mysterious manuscript from the same time period that also features a combination of strange writing and diagrams.
@@ -15,3 +15,4 @@ The book is written in a combination of Latin, Old English, and a mysterious cip
 
 Taken from: https://www.holybooks.com/the-book-of-soyga/
 
+    
